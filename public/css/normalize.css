@@ -1,0 +1,156 @@
+
+.vehicle-picker__panel {
+    display: none;
+}
+.vehicle-picker__panel-body {
+    padding: 20px 20px 28px;
+}
+.vehicle-picker__panel--active {
+    display: block;
+}
+
+.search__button--start {
+    -ms-flex-order: -1;
+    order: -1;
+    border: 1px solid transparent;
+    background-repeat: no-repeat;
+    background-size: 5px 10px;
+    border-radius: 2.5px;
+    transition: color .15s, background-color .15s;
+    background-color: #f0f0f0;
+    color: #262626;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 10'%3E%3Cpath fill='rgba(0, 0, 0, 0.35)' d='M4.503 4H.497c-.403 0-.639-.508-.408-.878L2.095.233a.469.469 0 0 1 .816 0l2 2.889c.231.37-.005.878-.408.878zM.497 6h4.006c.403 0 .639.504.408.871L2.905 9.737a.47.47 0 0 1-.816 0l-2-2.866C-.142 6.504.094 6 .497 6z'/%3E%3C/svg%3E");
+    padding-right: 30px !important;
+    margin-right: 5px;
+    background-position: right 15px center;
+}
+.search__dropdown--open {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    transition-delay: 0s;
+}
+.search__dropdown {
+    color: #262626;
+    background-color: #fff;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, .2);
+    position: absolute;
+    top: 100%;
+    border-radius: 1.5px;
+    opacity: 0;
+    transform: translateY(26px);
+    visibility: hidden;
+    transition: opacity .25s cubic-bezier(.645, .045, .355, 1), transform .25s cubic-bezier(.645, .045, .355, 1), visibility 0s .25s;
+    z-index:100;
+    max-width:200px;
+}
+.search__dropdown--open {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.mobile-indicator__icon {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* ==========================
+   🖥️ Desktop (1200px and up)
+   ========================== */
+@media (min-width: 1200px) {
+    /* your desktop-specific CSS here */
+}
+
+/* ==========================
+   💻 Laptop / Small Desktop (992px–1199px)
+   ========================== */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .mobile-indicator__icon {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* ==========================
+   📱 Tablet (768px–991px)
+   ========================== */
+@media (min-width: 768px) and (max-width: 991px) {
+    form > .d-flex {
+        flex-wrap: wrap;
+        flex-direction: column;
+    }
+}
+
+/* ==========================
+   📲 Mobile (up to 767px)
+   ========================== */
+@media (max-width: 767px) {
+    form .d-flex {
+        flex-wrap: wrap;
+        flex-direction: column;
+    }
+
+    .vehicle-picker__panel {
+        display: none;
+    }
+    .vehicle-picker__panel--active {
+        display: block;
+    }
+    .vehicle-picker__panel-body {
+        padding: 20px 20px 28px;
+    }
+    .search__button--start {
+        -ms-flex-order: -1;
+        order: -1;
+        border: 1px solid transparent;
+        background-repeat: no-repeat;
+        background-size: 5px 10px;
+        border-radius: 2.5px;
+        transition: color .15s, background-color .15s;
+        background-color: #f0f0f0;
+        color: #262626;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 10'%3E%3Cpath fill='rgba(0, 0, 0, 0.35)' d='M4.503 4H.497c-.403 0-.639-.508-.408-.878L2.095.233a.469.469 0 0 1 .816 0l2 2.889c.231.37-.005.878-.408.878zM.497 6h4.006c.403 0 .639.504.408.871L2.905 9.737a.47.47 0 0 1-.816 0l-2-2.866C-.142 6.504.094 6 .497 6z'/%3E%3C/svg%3E");
+        padding-right: 30px !important;
+        margin-right: 5px;
+        background-position: right 15px center;
+    }
+    .search__dropdown--open {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+        transition-delay: 0s;
+    }
+    .search__dropdown {
+        color: #262626;
+        background-color: #fff;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, .2);
+        position: absolute;
+        top: 100%;
+        border-radius: 1.5px;
+        opacity: 0;
+        transform: translateY(26px);
+        visibility: hidden;
+        transition: opacity .25s cubic-bezier(.645, .045, .355, 1), transform .25s cubic-bezier(.645, .045, .355, 1), visibility 0s .25s;
+        max-width: 100%;
+        width: 100%;
+        left: 0;
+    }
+    .search__dropdown--open {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+        transition-delay: 0s;
+    }
+
+}
+
+/* ==========================
+   📞 Small Mobile (up to 480px)
+   ========================== */
+@media (max-width: 480px) {
+    /* your small phone-specific CSS here */
+}
