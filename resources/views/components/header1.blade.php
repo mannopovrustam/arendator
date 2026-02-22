@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-between py-4 px-7 pt-8">
-                            <a href="/dashboard" class="btn btn-outline-primary"><i class="fa fa-user"></i> Kabinet</a>
+                            <a @if($user->user_type == 1) href="/dashboard" @endif class="btn btn-outline-primary"><i class="fa fa-user"></i> Kabinet</a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <a href="{{ route('logout') }}" class="btn btn-outline-danger"
@@ -127,7 +127,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between py-4 px-7 pt-8">
-                                    <a href="/dashboard" class="btn btn-outline-primary"><i class="fa fa-user"></i> Kabinet</a>
+                                    <a @if($user->user_type == 1) href="/dashboard" @endif class="btn btn-outline-primary"><i class="fa fa-user"></i> Kabinet</a>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
                                         <a href="{{ route('logout') }}" class="btn btn-outline-danger"

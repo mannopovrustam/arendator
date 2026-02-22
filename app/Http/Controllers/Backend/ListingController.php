@@ -16,6 +16,7 @@ class ListingController
 
     public function __construct() {
         $this->path = 'backend.' . Str::singular(\Request::segment(2));
+//        $this->middleware('auth')->only(['create']);
     }
 
     public function index()
@@ -63,7 +64,7 @@ class ListingController
     public function store(Request $request)
     {
         try {
-            $data = $request->except(['_token', 'images', 'data_id', 'price_type', 'price', 'cadastr']);
+            $data = $request->except(['_token', 'images', 'data_id', 'price_type', 'price', 'cadastr', 'add_hotel']);
             $data['is_rent'] = in_array('rent', $request->input('price_type')) ? 1 : 0;
             $data['is_sell'] = in_array('sell', $request->input('price_type')) ? 1 : 0;
             $data['rent_type'] = in_array('rent', $request->input('price_type')) && isset($request->input('price')['rent_type']) ? $request->input('price')['rent_type'] : null;

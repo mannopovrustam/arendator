@@ -7,10 +7,12 @@
             flex-wrap: wrap;
             opacity: 1;
         }
+
         .appointments > div {
             display: flex;
             flex: 1 1 30%;
         }
+
         @media (max-width: 768px) {
             .appointments {
                 flex-direction: column;
@@ -20,7 +22,7 @@
     <style>
         /* styles.css */
         #imageList {
-            min-height: 100px;
+            /*min-height: 100px;*/
         }
 
         .image-item {
@@ -89,12 +91,14 @@
             background: #e9ecef;
             transform: scale(1.02);
         }
+
         /* Map Section */
         #map {
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-        label.btn-outline-primary{
+
+        label.btn-outline-primary {
             margin-left: 3px;
         }
     </style>
@@ -103,9 +107,9 @@
 @section('content')
     <div class="site">
 
-{{--        send data to layouts.header--}}
+        {{--        send data to layouts.header--}}
         @include('layouts.header', ['pageTitle' => 'E\'lon qo\'shish', 'user' => auth()->user()])
-{{--        @include('layouts.header')--}}
+        {{--        @include('layouts.header')--}}
 
         <div class="site__body">
             <div class="block-header block-header--has-breadcrumb block-header--has-title">
@@ -117,50 +121,64 @@
                                     <div class="card-header"><h5>E'lon qo‘shish</h5></div>
                                     <div class="card-divider"></div>
                                     <div class="card-body card-body--padding--2">
-                                        <form action="/listings/{{ \Request::segment(2) }}" method="post"
-                                              enctype="multipart/form-data">
+                                        <form action="{{ asset('listings') }}" method="post" enctype="multipart/form-data"
+                                              id="add_listing_form">
                                             @csrf
 
+                                            <input type="hidden" name="add_hotel" value="1">
                                             <div class="row no-gutters">
                                                 <div class="col-12">
                                                     <div class="form-row">
                                                         <div class="form-group col-md-12">
-                                                            <label for="address-first-name">Joylashtirish vositasi</label>
+                                                            <label for="address-first-name">Joylashtirish
+                                                                vositasi</label>
                                                             <div class="form-group d-flex">
-                                                                <select name="hotel_id" class="form-control" style="width: 100%;" id="hotel_id"></select>
+                                                                <select name="hotel_id" class="form-control"
+                                                                        style="width: 100%;" id="hotel_id"></select>
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-md-12">
                                                             <label for="address-first-name">Obyekt kategoriyasi</label>
                                                             <div class="form-group d-flex flex-wrap appointments">
                                                                 @foreach(\DB::table('object_category')->where('id_object_type',4)->get() as $cat)
-                                                                    <label class="payment-methods__item-header btn-secondary mt-2 mr-2 object_category object_type_{{$cat->id_object_type}}"
-                                                                           for="object_cat_{{ $cat->id }}">
-                                                                    <span class="payment-methods__item-radio input-radio">
+                                                                    <label
+                                                                        class="payment-methods__item-header btn-secondary mt-2 mr-2 object_category object_type_{{$cat->id_object_type}}"
+                                                                        for="object_cat_{{ $cat->id }}">
+                                                                    <span
+                                                                        class="payment-methods__item-radio input-radio">
                                                                         <span class="input-radio__body">
-                                                                            <input class="input-radio__input" name="category_id" id="object_cat_{{ $cat->id }}" value="{{ $cat->id }}" type="radio">
+                                                                            <input class="input-radio__input"
+                                                                                   name="category_id"
+                                                                                   id="object_cat_{{ $cat->id }}"
+                                                                                   value="{{ $cat->id }}" type="radio">
                                                                             <span class="input-radio__circle"></span>
                                                                         </span>
                                                                     </span>
-                                                                        <span class="payment-methods__item-title">{{ $cat->name }}</span>
+                                                                        <span
+                                                                            class="payment-methods__item-title">{{ $cat->name }}</span>
                                                                     </label>
                                                                 @endforeach
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group properties" style="display:none">
-                                                        <div><label class="form-label" for="main_pty">Obyekt</label></div>
+                                                        <div><label class="form-label" for="main_pty">Obyekt</label>
+                                                        </div>
                                                         <div>
-                                                            @foreach([7,8,9,10,12,36] as $obj)
+                                                            @foreach([7,8,9,10,12,13,14,15,16,17,18,19,20,21,22,23,24,25,36] as $obj)
                                                                     <?php
-                                                                    $property[$obj] = explode(',',\DB::table('object_category')->where('id', $obj)->first()->property);
+                                                                    $property[$obj] = explode(',', \DB::table('object_category')->where('id', $obj)->first()->property);
                                                                     $object_pty[$obj] = \DB::table('object_pty')->whereIn('id', $property[$obj])->get();
                                                                     ?>
-                                                                <div class="form-group pty pty_{{ $obj }}" style="display:none">
-                                                                    <select class="form-control form-control-select2" name="main_pty" id="main_pty" style="width: 100%;">
-                                                                        <option>*** Выбрать ***</option>
+                                                                <div class="form-group pty pty_{{ $obj }}"
+                                                                     style="display:none">
+                                                                    <select class="form-control form-control-select2"
+                                                                            name="main_pty" id="main_pty"
+                                                                            style="width: 100%;">
+                                                                        <option>*** Tanlash ***</option>
                                                                         @foreach($object_pty[$obj] as $o)
-                                                                            <option value="{{ $o->id }}">{{ $o->name }}</option>
+                                                                            <option
+                                                                                value="{{ $o->id }}">{{ $o->name_uz }}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
@@ -170,16 +188,19 @@
 
                                                     <div class="form-group">
                                                         <label for="region_id">Viloyat</label>
-                                                        <select id="region_id" class="form-control form-control-select2">
+                                                        <select id="region_id"
+                                                                class="form-control form-control-select2">
                                                             <option value="">*** Viloyat tanlang ***</option>
                                                             @foreach(\DB::table('regions')->get() as $region)
-                                                                <option value="{{ $region->id }}">{{ $region->name }}</option>
+                                                                <option
+                                                                    value="{{ $region->id }}">{{ $region->name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="district_id">Tuman</label>
-                                                        <select name="district_id" id="district_id" class="form-control form-control-select2">
+                                                        <select name="district_id" id="district_id"
+                                                                class="form-control form-control-select2">
                                                             <option value="">*** Tuman tanlang ***</option>
                                                         </select>
                                                     </div>
@@ -200,7 +221,7 @@
                                                     </div>
 
                                                     <div class="form-group">
-{{--                                                        <label>Kurs</label>--}}
+                                                        {{--                                                        <label>Kurs</label>--}}
                                                         <div class="d-flex justify-content-between">
                                                             {{--<div class="d-flex">
                                                                 <label class="filter-list__item btn btn-secondary mr-2"><span
@@ -224,7 +245,8 @@
                                                                         class="filter-list__title">Sotuv </span>
                                                                 </label>
                                                             </div>--}}
-                                                            <input class="input-check__input" id="rent" name="price_type[]" value="rent" type="hidden">
+                                                            <input class="input-check__input" id="rent"
+                                                                   name="price_type[]" value="rent" type="hidden">
 
                                                         </div>
                                                     </div>
@@ -238,7 +260,8 @@
                                                                     for="month_price"><span
                                                                         class="payment-methods__item-radio input-radio"><span
                                                                             class="input-radio__body"><input
-                                                                                class="input-radio__input" name="price[rent_type]"
+                                                                                class="input-radio__input"
+                                                                                name="price[rent_type]"
                                                                                 id="month_price" value="monthly"
                                                                                 type="radio"> <span
                                                                                 class="input-radio__circle"></span> </span></span><span
@@ -248,18 +271,24 @@
                                                                     for="day_price"><span
                                                                         class="payment-methods__item-radio input-radio"><span
                                                                             class="input-radio__body"><input
-                                                                                class="input-radio__input" name="price[rent_type]"
+                                                                                class="input-radio__input"
+                                                                                name="price[rent_type]"
                                                                                 id="day_price" value="daily"
                                                                                 type="radio"> <span
                                                                                 class="input-radio__circle"></span> </span></span><span
                                                                         class="payment-methods__item-title">kunlik</span></label>
                                                             </div>
                                                         </div>
-                                                        <div id="rent_price" style="display:flex; justify-content: space-between;flex-wrap: wrap;align-items: center;">
-                                                            <input type="text" class="form-control only_digit col-md-7" id="price" value="" name="price[rent]" placeholder="Narxi" autocomplete="off">
+                                                        <div id="rent_price"
+                                                             style="display:flex; justify-content: space-between;flex-wrap: wrap;align-items: center;">
+                                                            <input type="text" class="form-control only_digit col-md-7"
+                                                                   id="price" value="" name="price[rent]"
+                                                                   placeholder="Narxi" autocomplete="off">
                                                             <div class="d-flex">
                                                                 @foreach(\DB::table('sp_currencies')->get() as $cur)
-                                                                    <label class="payment-methods__item-header btn-secondary mr-2 mt-2 mb-2" for="currency_{{ $cur->id }}"><span
+                                                                    <label
+                                                                        class="payment-methods__item-header btn-secondary mr-2 mt-2 mb-2"
+                                                                        for="currency_{{ $cur->id }}"><span
                                                                             class="payment-methods__item-radio input-radio"><span
                                                                                 class="input-radio__body"><input
                                                                                     class="input-radio__input"
@@ -282,7 +311,8 @@
                                                                         for="all_price"><span
                                                                             class="payment-methods__item-radio input-radio"><span
                                                                                 class="input-radio__body"><input
-                                                                                    class="input-radio__input" name="price[sell_type]"
+                                                                                    class="input-radio__input"
+                                                                                    name="price[sell_type]"
                                                                                     id="all_price" value="all"
                                                                                     type="radio"> <span
                                                                                     class="input-radio__circle"></span> </span></span><span
@@ -292,17 +322,22 @@
                                                                         for="square_price"><span
                                                                             class="payment-methods__item-radio input-radio"><span
                                                                                 class="input-radio__body"><input
-                                                                                    class="input-radio__input" name="price[sell_type]"
+                                                                                    class="input-radio__input"
+                                                                                    name="price[sell_type]"
                                                                                     id="square_price" value="square"
                                                                                     type="radio"> <span
                                                                                     class="input-radio__circle"></span> </span></span><span
                                                                             class="payment-methods__item-title">m<sup>2</sup></span></label>
                                                                 </div>
-                                                                <input type="text" class="form-control ml-3 only_digit col-md-7" id="address" value="" name="price[sell]" placeholder="Цена" autocomplete="off">
+                                                                <input type="text"
+                                                                       class="form-control ml-3 only_digit col-md-7"
+                                                                       id="address" value="" name="price[sell]"
+                                                                       placeholder="Цена" autocomplete="off">
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group"><label for="description">Izoh</label> <textarea
+                                                    <div class="form-group"><label for="description">Izoh</label>
+                                                        <textarea
                                                             id="description" class="form-control" rows="4"></textarea>
                                                     </div>
 
@@ -311,74 +346,25 @@
                                                         <div>Rasm</div>
                                                         <div>
                                                             <div id="dropArea" class="drop-area mb-3">
-                                                                <label class="" for="dragImageUpload">Rasmlarni bu yerga sudrab olib tashlang, buferni joylashtiring yoki tanlash uchun bosing</label>
-                                                                <input type="file" id="dragImageUpload" accept="image/*" multiple style="display: none;">
+                                                                <label class="" for="dragImageUpload">Rasmlarni bu yerga
+                                                                    sudrab olib tashlang, buferni joylashtiring yoki
+                                                                    tanlash uchun bosing</label>
+                                                                <input type="file" id="dragImageUpload" accept="image/*"
+                                                                       multiple style="display: none;">
                                                             </div>
                                                             <input type="hidden" name="images">
                                                             <!-- Image preview and sorting area -->
-                                                            <div id="imageList" class="row row-cols-1 row-cols-md-3 g-4">
+                                                            <div id="imageList"
+                                                                 class="row row-cols-1 row-cols-md-3 g-4">
                                                                 <!-- Images will be dynamically added here -->
                                                             </div>
                                                         </div>
                                                     </div>
 
-
-                                                    <div class="p-3 border-top">
-                                                        <div class="col-sm-12">
-                                                            @if(!auth()->check())
-                                                                <div class="p-3 login">
-                                                                    <div class="form-group mb-3 pb-3">
-                                                                        <div class="login" style="display: block">
-                                                                            <div class="row align-items-start">
-                                                                                <label for="start_time" class="col-sm-2 text-end control-label col-form-label">Telefon</label>
-                                                                                <div class="col-sm-4">
-                                                                                    <div class="input-group mb-3">
-                                                                                        <span class="input-group-text border border-neutral-950" id="basic-addon1">+998</span>
-                                                                                        <input type="tel" class="form-control phone-inputmask bg-white" id="login_phone">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <label for="end_time" class="col-sm-1 text-end control-label col-form-label">Parol</label>
-                                                                                <div class="col-sm-3">
-                                                                                    <input type="password" class="form-control bg-white" id="password">
-                                                                                    <span class="text-muted">Parol 6 ta belgidan kam bo'lmasligi kerak</span>
-                                                                                </div>
-                                                                                <div class="col-sm-2 d-flex justify-content-end">
-                                                                                    <div class="form-group mb-0">
-                                                                                        <button class="btn btn-primary" type="button" onclick="getCode()">Kirish</button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="verify_code" style="display: none">
-                                                                            <div class="row">
-                                                                                <label for="phone" class="col-sm-2 text-end control-label col-form-label">Kodni kiriting</label>
-                                                                                <div class="col-sm-3">
-                                                                                    <div class="input-group mb-3">
-                                                                                        <span class="input-group-text border border-neutral-950 fs-5" id="basic-addon1"><i class="fa fa-comment-dots"></i></span>
-                                                                                        <input type="text" class="form-control bg-white" id="verify">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-group mb-0">
-                                                                                    <button class="btn btn-primary" type="button" onclick="getCode()">Kiritish</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group text-end submit_button" id="submit_button" style="display: none">
-                                                                    <button type="submit" class="btn btn-primary">
-                                                                        Saqlash
-                                                                    </button>
-                                                                </div>
-                                                            @else
-                                                                <div class="form-group text-end">
-                                                                    <button type="submit" class="btn btn-primary">
-                                                                        Saqlash
-                                                                    </button>
-                                                                </div>
-                                                            @endif
-                                                        </div>
+                                                    <div class="form-group d-flex justify-content-end">
+                                                        <button type="submit" class="btn btn-primary">Saqlash</button>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </form>
@@ -419,7 +405,7 @@
                 dataType: "json",
                 type: "GET",
                 data: function (params) {
-                    return { term: params.term };
+                    return {term: params.term};
                 },
                 processResults: function (data) {
                     return {
@@ -455,7 +441,7 @@
                 if (regionId) {
                     $.ajax({
                         url: '{{ asset('data/districts') }}',
-                        data: { region_id: regionId },
+                        data: {region_id: regionId},
                         success: function (html) {
                             $('#district_id').html(html);
                             $('#district_id').val(districtId).trigger('change');
@@ -487,7 +473,20 @@
                 }
             }
 
-            var hotelTypeToCategory = {27: 13,1: 15,29: 16,7: 17,8: 18,35: 19,10: 20,18: 21,6: 22,33: 23,22: 24,28: 25};
+            var hotelTypeToCategory = {
+                27: 13,
+                1: 15,
+                29: 16,
+                7: 17,
+                8: 18,
+                35: 19,
+                10: 20,
+                18: 21,
+                6: 22,
+                33: 23,
+                22: 24,
+                28: 25
+            };
 
             if (data.hotel_type_id && hotelTypeToCategory[data.hotel_type_id]) {
                 var categoryId = hotelTypeToCategory[data.hotel_type_id];
@@ -502,8 +501,8 @@
 
     <script>
 
-        $(window).keydown(function(event){
-            if(event.keyCode == 13) {
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
                 event.preventDefault();
                 return false;
             }
@@ -512,13 +511,14 @@
         $(document).on('change', 'input[name="type_id"]', function () {
             $('.object_category').hide();
             $('.object_type_' + $(this).val()).show();
-            if ($(this).val() == 3) {
+            // if $(this).val() in array 3,4
+            if (jQuery.inArray($(this).val(), ["3", "4"]) !== -1) {
                 $('.properties').hide();
             }
         });
 
         $(document).on('change', 'input[name="category_id"]', function () {
-            if(jQuery.inArray($(this).val(), ["7","8","9","10","12","36"]) !== -1){
+            if (jQuery.inArray($(this).val(), ["7", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "36"]) !== -1) {
                 $('.properties').show();
             } else {
                 $('.properties').hide();
@@ -601,9 +601,10 @@
     </script>
     <script>
         var imageItems = [];
+
         function handleImageUpload(files) {
             if (files.length > 0) {
-                $.each(files, function(index, file) {
+                $.each(files, function (index, file) {
                     // Validate file type
                     if (!file.type.match('image.*')) {
                         alert('Please upload an image file.');
@@ -612,25 +613,25 @@
 
                     // Read the file and create a preview
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         const imageSrc = e.target.result;
 
                         $.ajax({
                             url: '/listings/upload-image',
                             method: 'POST',
-                            data: { image: imageSrc, _token: '{{ csrf_token() }}' },
-                            success: function(response) {
+                            data: {image: imageSrc, _token: '{{ csrf_token() }}'},
+                            success: function (response) {
                                 imageItems.push(response.imageUrl);
                                 console.log(response.imageUrl);
                                 var imageItem = '';
                                 imageItem += '<div class="col image-item">';
-                                imageItem += '<img src="'+response.imageUrl+'" alt="Uploaded Image">';
+                                imageItem += '<img src="' + response.imageUrl + '" alt="Uploaded Image">';
                                 imageItem += '<button class="delete-btn" type="button" title="Delete Image">X</button>';
                                 imageItem += '</div>';
                                 $('#imageList').append(imageItem);
                                 $('input[name="images"]').val(imageItems);
                             },
-                            error: function(xhr, status, error) {
+                            error: function (xhr, status, error) {
                                 console.error('Image upload error:', error);
                             }
                         });
@@ -645,7 +646,7 @@
         }
 
         // Handle dropdown image upload
-        $('#imageUpload').on('change', function(event) {
+        $('#imageUpload').on('change', function (event) {
             const files = event.target.files;
             handleImageUpload(files);
             $(this).val(''); // Reset the file input
@@ -656,28 +657,28 @@
         const dragImageUpload = $('#dragImageUpload');
 
         // Allow clicking the drop area to trigger file input
-        dropArea.on('click', function() {
+        dropArea.on('click', function () {
             // dragImageUpload.click();
         });
 
-        dragImageUpload.on('change', function(event) {
+        dragImageUpload.on('change', function (event) {
             const files = event.target.files;
             handleImageUpload(files);
             $(this).val(''); // Reset the file input
         });
 
         // Drag-and-drop events
-        dropArea.on('dragover', function(event) {
+        dropArea.on('dragover', function (event) {
             event.preventDefault();
             $(this).addClass('drag-over');
         });
 
-        dropArea.on('dragleave', function(event) {
+        dropArea.on('dragleave', function (event) {
             event.preventDefault();
             $(this).removeClass('drag-over');
         });
 
-        dropArea.on('drop', function(event) {
+        dropArea.on('drop', function (event) {
             event.preventDefault();
             $(this).removeClass('drag-over');
             const files = event.originalEvent.dataTransfer.files;
@@ -687,9 +688,9 @@
         // Enable drag-and-drop sorting
         $('#imageList').sortable({
             placeholder: 'ui-sortable-placeholder',
-            update: function(event, ui) {
+            update: function (event, ui) {
                 // Log the new order of images
-                const imageOrder = $('#imageList .image-item img').map(function() {
+                const imageOrder = $('#imageList .image-item img').map(function () {
                     return $(this).attr('src');
                 }).get();
                 console.log('New image order:', imageOrder);
@@ -700,19 +701,19 @@
             $.ajax({
                 url: '/listings/upload-image',
                 method: 'POST',
-                data: { image: imageSrc, _token: '{{ csrf_token() }}' },
-                success: function(response) {
+                data: {image: imageSrc, _token: '{{ csrf_token() }}'},
+                success: function (response) {
                     imageItems.push(response.imageUrl);
                     console.log(response.imageUrl);
                     var imageItem = '';
                     imageItem += '<div class="col image-item">';
-                    imageItem += '<img src="'+response.imageUrl+'" alt="Uploaded Image">';
+                    imageItem += '<img src="' + response.imageUrl + '" alt="Uploaded Image">';
                     imageItem += '<button class="delete-btn" type="button" title="Delete Image">X</button>';
                     imageItem += '</div>';
                     $('#imageList').append(imageItem);
                     $('input[name="images"]').val(imageItems);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error('Image upload error:', error);
                 }
             });
@@ -721,21 +722,21 @@
         }
 
         // Handle image deletion
-        $('#imageList').on('click', '.delete-btn', function() {
+        $('#imageList').on('click', '.delete-btn', function () {
             var imageSrc = $(this).prev('img').attr('src');
             $.ajax({
                 url: '/listings/delete-image',
                 method: 'POST',
-                data: { image: imageSrc, _token: '{{ csrf_token() }}' },
-                success: function(response) {
+                data: {image: imageSrc, _token: '{{ csrf_token() }}'},
+                success: function (response) {
                     console.log('Image deleted:', response);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error('Image deletion error:', error);
                 }
             });
             // remove from imageItems
-            imageItems = imageItems.filter(function(item) {
+            imageItems = imageItems.filter(function (item) {
                 console.log(item, imageSrc);
                 return item !== imageSrc;
             });
@@ -745,7 +746,7 @@
             console.log('Image items:', imageItems);
         });
 
-        $(document).on('paste', function(event) {
+        $(document).on('paste', function (event) {
             const clipboardData = (event.originalEvent || event).clipboardData;
             if (!clipboardData) {
                 alert('Unable to access clipboard data.');
@@ -763,7 +764,7 @@
                         imageFound = true;
                         const blob = item.getAsFile();
                         const reader = new FileReader();
-                        reader.onload = function(e) {
+                        reader.onload = function (e) {
                             pasteImageToList(e.target.result);
                         };
                         reader.readAsDataURL(blob);
@@ -783,10 +784,10 @@
                         imageFound = true;
                         // Validate the image URL
                         const img = new Image();
-                        img.onload = function() {
+                        img.onload = function () {
                             pasteImageToList(imgElement.src);
                         };
-                        img.onerror = function() {
+                        img.onerror = function () {
                             alert('Failed to load the pasted image. Please try another method.');
                         };
                         img.src = imgElement.src;
@@ -802,10 +803,10 @@
                         if (urlPattern.test(textData)) {
                             imageFound = true;
                             const img = new Image();
-                            img.onload = function() {
+                            img.onload = function () {
                                 pasteImageToList(textData);
                             };
-                            img.onerror = function() {
+                            img.onerror = function () {
                                 alert('Failed to load the pasted image URL. Please try another method.');
                             };
                             img.src = textData;
@@ -821,67 +822,23 @@
         });
 
     </script>
-    <script>
-        function getCode() {
-            if ($('#login_phone').val().length == 0) {
-                alert('Phone number is not valid');
-                return;
-            }
-            if ($('#password').val().length < 6) {
-                alert('Password is not valid');
-                return;
-            }
-
-            $.ajax({
-                url: '/profile/phone-auth',
-                type: 'POST',
-                data: {
-                    phone: $('#login_phone').val(),
-                    password: $('#password').val(),
-                    verify: $('#verify').val(),
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function (data) {
-                    switch (data.status) {
-                        case 0:
-                            $('.login').hide();
-                            $('.verify_code').show();
-                            break;
-                        case 1:
-                            $('#user_id').val(data.user_id);
-                            $('.login').hide();
-                            $('.verify_code').hide();
-                            $('.submit_button').show();
-                            break;
-                        case 2:
-                            alert('Verify code is not valid');
-                            $('#verify').val('');
-                            break;
-                        case 3:
-                            alert('Password is not valid');
-                            break;
-                    }
-
-                }
-            });
-        }
-    </script>
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=b5335094-c96c-42e3-b856-499ff1aaf16a&lang=ru_RU" type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=b5335094-c96c-42e3-b856-499ff1aaf16a&lang=ru_RU"
+            type="text/javascript"></script>
     <script>
         // Initialize Yandex Map
         let myMap;
         let placemark;
 
-        ymaps.ready(function() {
+        ymaps.ready(function () {
             // Create the map
             myMap = new ymaps.Map('map', {
-                center: [41.295378589581,69.2477123573415], // Default center (Moscow)
+                center: [41.295378589581, 69.2477123573415], // Default center (Moscow)
                 zoom: 10,
                 controls: ['zoomControl', 'geolocationControl']
             });
 
             // Handle map click to set a placemark and get the address
-            myMap.events.add('click', function(e) {
+            myMap.events.add('click', function (e) {
                 const coords = e.get('coords'); // Get the coordinates of the clicked point
 
                 // Remove the previous placemark if it exists
@@ -895,7 +852,7 @@
                 myMap.geoObjects.add(placemark);
 
                 // Use reverse geocoding to get the address
-                ymaps.geocode(coords, { kind: 'house' }).then(function(res) {
+                ymaps.geocode(coords, {kind: 'house'}).then(function (res) {
                     const firstGeoObject = res.geoObjects.get(0);
                     console.log(firstGeoObject);
                     if (firstGeoObject) {
@@ -905,7 +862,7 @@
                     } else {
                         $('#address').val('Address not found');
                     }
-                }).catch(function(err) {
+                }).catch(function (err) {
                     console.error('Geocoding error:', err);
                     $('#address').val('Error retrieving address');
                 });

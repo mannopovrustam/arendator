@@ -347,14 +347,14 @@
                         <span>Yopish</span>
                     </a>
                 </li>
+                <?php $user = auth()->user(); ?>
                 <li class="header-lang">
-                    <a href="/dashboard" class="header-lang__btn">Kirish</a>
+                    <a @if($user->user_type == 1) href="/dashboard" @endif class="header-lang__btn">Kirish</a>
                 </li>
             </ul>
         </nav>
     </div>
 </header>
-
 
 <!-- ГЛАВНАЯ СЕКЦИЯ-->
 

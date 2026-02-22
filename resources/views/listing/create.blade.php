@@ -115,8 +115,7 @@
                                 <div class="card-header"><h5>E'lon qo‘shish</h5></div>
                                 <div class="card-divider"></div>
                                 <div class="card-body card-body--padding--2">
-                                    <form action="/listings/{{ \Request::segment(2) }}" method="post"
-                                          enctype="multipart/form-data">
+                                    <form action="/listings/create" method="post" enctype="multipart/form-data">
                                         @csrf
 
                                         <div class="row no-gutters">
@@ -136,8 +135,6 @@
                                                                                 type="radio"> <span
                                                                                 class="input-radio__circle"></span> </span></span><span
                                                                         class="payment-methods__item-title">{{ $obt->name }}</span></label>
-{{--                                                                <input type="radio" class="btn-check" name="type_id" id="object_type_{{ $obt->id }}" autocomplete="off" value="{{ $obt->id }}">--}}
-{{--                                                                <label class="btn btn-outline-primary" for="object_type_{{ $obt->id }}">{{ $obt->name }}</label>--}}
                                                             @endforeach
                                                         </div>
                                                     </div>
@@ -155,25 +152,40 @@
                                                                     </span>
                                                                     <span class="payment-methods__item-title">{{ $cat->name }}</span>
                                                                 </label>
-{{--                                                                <input type="radio" class="btn-check" name="type_id" id="object_type_{{ $obt->id }}" autocomplete="off" value="{{ $obt->id }}">--}}
-{{--                                                                <label class="btn btn-outline-primary" for="object_type_{{ $obt->id }}">{{ $obt->name }}</label>--}}
                                                             @endforeach
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-md-12">
+                                                        <label for="object-name">Obyekt Nomi</label>
+                                                        <div class="form-group">
+                                                            <input id="room_type_text" class="form-control" list="added-objects" name="object-name"
+                                                                   placeholder="Misol: Integro"
+                                                                   title="Misol: 3-xonalik kvartira, markaziy hudud, 2-qavat (kiriting qisqa va ёрқин nom)">
+
+                                                            @auth
+                                                                <datalist id="added-objects">
+                                                                    @foreach(\DB::table('tb_listings_parent')->where('entry_by', auth()->id())->pluck('name') as $id => $name)
+                                                                        <option value="{{ $name }}">
+                                                                    @endforeach
+                                                                </datalist>
+                                                            @endauth
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group properties" style="display:none">
                                                     <div><label class="form-label" for="main_pty">Obyekt</label></div>
                                                     <div>
-                                                        @foreach([7,8,9,10,12,36] as $obj)
+                                                        @foreach([7,8,9,10,12,13,14,15,16,17,18,19,20,21,22,23,24,25,36] as $obj)
                                                                 <?php
                                                                     $property[$obj] = explode(',',\DB::table('object_category')->where('id', $obj)->first()->property);
                                                                     $object_pty[$obj] = \DB::table('object_pty')->whereIn('id', $property[$obj])->get();
                                                                 ?>
                                                             <div class="form-group pty pty_{{ $obj }}" style="display:none">
                                                                 <select class="form-control form-control-select2" name="main_pty" id="main_pty" style="width: 100%;">
-                                                                    <option>*** Выбрать ***</option>
+                                                                    <option>*** Tanlash ***</option>
                                                                     @foreach($object_pty[$obj] as $o)
-                                                                        <option value="{{ $o->id }}">{{ $o->name }}</option>
+                                                                        <option value="{{ $o->id }}">{{ $o->name_uz }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -183,7 +195,7 @@
 
                                                 <div class="form-group">
                                                     <label for="region_id">Viloyat</label>
-                                                    <select id="region_id" class="form-control">
+                                                    <select id="region_id" class="form-control form-control-select2">
                                                         <option value="">*** Viloyat tanlang ***</option>
                                                         @foreach(\DB::table('regions')->get() as $region)
                                                             <option value="{{ $region->id }}">{{ $region->name }}</option>
@@ -192,7 +204,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="district_id">Tuman</label>
-                                                    <select name="district_id" id="district_id" class="form-control">
+                                                    <select name="district_id" id="district_id" class="form-control form-control-select2">
                                                         <option value="">*** Tuman tanlang ***</option>
                                                     </select>
                                                 </div>
@@ -424,6 +436,15 @@
 <script src="/js/mask.init.js"></script>
 <script>
 
+    $('#object-name').on('input', function () {
+        let val = this.value;
+        let id = $('#added-objects option').filter(function(){
+            return this.value === val;
+        }).data('id');
+
+        $('#object-name').val(id ?? '');
+    });
+
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
             event.preventDefault();
@@ -434,13 +455,13 @@
     $(document).on('change', 'input[name="type_id"]', function () {
         $('.object_category').hide();
         $('.object_type_' + $(this).val()).show();
-        if ($(this).val() == 3) {
+        if(jQuery.inArray($(this).val(), ["3","4"]) !== -1){
             $('.properties').hide();
         }
     });
 
     $(document).on('change', 'input[name="category_id"]', function () {
-        if(jQuery.inArray($(this).val(), ["7","8","9","10","12","36"]) !== -1){
+        if(jQuery.inArray($(this).val(), ["7","8","9","10","12","13","14","15","16","17","18","19","20","21","22","23","24","25","36"]) !== -1){
             $('.properties').show();
         } else {
             $('.properties').hide();
@@ -514,39 +535,6 @@
         }
     });
 
-
-    $(document).ready(function () {
-        $('.product-item').click(function () {
-            $('.mobile-product').slideToggle(700);
-            $('body').css('overflow', 'hidden');
-        })
-        // if click out of mobile-product__wrap and in mobile-product slide toggle
-        $('.mobile-product__wrap').click(function (e) {
-            e.stopPropagation()
-        })
-
-        // load data
-        $.ajax({
-            url: '/listings/data',
-            type: 'get',
-            success: function (response) {
-                $('.product-wrap').html(response);
-            }
-        });
-    });
-    // onscroll page load more content to .product-wrap from /listings/data
-    $(window).scroll(function () {
-        // when scrolled 80% of the page
-        if ($(window).scrollTop() + $(window).height() > $(document).height() * 0.9) {
-            $.ajax({
-                url: '/listings/data',
-                type: 'get',
-                success: function (response) {
-                    $('.product-wrap').append(response);
-                }
-            });
-        }
-    });
 
     // change payment-methods__item-header btn-secondary to btn-primary
     $('.payment-methods__item-header').click(function () {

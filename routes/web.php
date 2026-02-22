@@ -118,7 +118,6 @@ Route::post('listing/phone-auth', function () {
 });
 
 Route::auto('data', DataRepository::class);
-Route::get('data/search-hotels', [DataRepository::class, 'getSearchHotels']);
 Route::auto('filters', FilterController::class);
 Route::auto('listings', ListingController::class);
 Route::auto('bookings', BookingController::class);
@@ -181,3 +180,30 @@ Route::get('test', function (){
 Route::post('person-info', [\App\Services\PersonInfo::class, 'postPassportData']);
 
 Route::view('quickview', 'quickview');
+
+Route::get('add-users', function(){
+
+    \DB::table('tb_users')->truncate();
+
+    ini_set('max_execution_time', 0);
+
+    $hotels = \DB::table('tb_hotels')->whereNotIn('hotel_type_id',[30,31])->get();
+
+    $execute = 0;
+    $start_time = microtime(true);
+
+    foreach ($hotels as $hotel) {
+        $detail = [
+            'name' => $hotel->name,
+            'login' => strtolower(str_replace(' ', '', $hotel->name)) . '@rnt.uz',
+            'password' => Hash::make(substr($hotel->name, 0, 1) . $hotel->inn),
+            'user_type' => 5,
+        ];
+        if (\DB::table('tb_users')->insert($detail)) {
+            $execute++;
+        }
+    }
+
+    return "Executed: $execute, Time: " . round(microtime(true) - $start_time, 2) . " seconds";
+
+});

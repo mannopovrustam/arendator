@@ -10,7 +10,6 @@ class ListingController extends Controller
     public function index() {
         $data = [];
         $data['user'] = auth()->user();
-
         return view('listing.index',$data);
     }
 
@@ -24,14 +23,16 @@ class ListingController extends Controller
     }
 
     public function getCreateHotels(Request $request) {
+
         $data['hotels'] = \DB::table('tb_hotels')->first();
         return view('listing.create-hotels', $data);
     }
 
     public function store(Request $request)
     {
+
         try {
-            $data = $request->except(['_token', 'images', 'data_id', 'price_type', 'price']);
+            $data = $request->except(['_token', 'images', 'data_id', 'price_type', 'price', 'add_hotel']);
             $data['is_rent'] = in_array('rent', $request->input('price_type')) ? 1 : 0;
             $data['is_sell'] = in_array('sell', $request->input('price_type')) ? 1 : 0;
             $data['rent_type'] = in_array('rent', $request->input('price_type')) && isset($request->input('price')['rent_type']) ? $request->input('price')['rent_type'] : null;
