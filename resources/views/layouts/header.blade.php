@@ -56,7 +56,7 @@ $menus = collect($menus);
                     <?php $user = auth()->user(); ?>
 
                     <div class="mobile-indicator mobile-indicator--search d-md-none">
-                        <a @if($user->user_type == 1) href="/dashboard" @endif
+                        <a @if(auth()->check() && $user->user_type == 1) href="/dashboard" @endif
                            class="mobile-indicator__button"><span
                                 class="mobile-indicator__icon"><svg width="20" height="20"><path d="M20,20h-2c0-4.4-3.6-8-8-8s-8,3.6-8,8H0c0-4.2,2.6-7.8,6.3-9.3C4.9,9.6,4,7.9,4,6c0-3.3,2.7-6,6-6s6,2.7,6,6
 	c0,1.9-0.9,3.6-2.3,4.7C17.4,12.2,20,15.8,20,20z M14,6c0-2.2-1.8-4-4-4S6,3.8,6,6s1.8,4,4,4S14,8.2,14,6z"/></svg></span></a>
@@ -66,7 +66,7 @@ $menus = collect($menus);
                             <span class="mobile-indicator__icon text-white"><i class="fa fa-plus"></i> &nbsp;<b>E'lon qo‘shish</b></span>
                         </a>
                     </div>
-                    <div class="mobile-indicator d-none d-md-block"><a @if($user->user_type == 1) href="/dashboard" @endif
+                    <div class="mobile-indicator d-none d-md-block"><a @if(auth()->check() && $user->user_type == 1) href="/dashboard" @endif
                                                                        class="mobile-indicator__button"><span
                                 class="mobile-indicator__icon"><svg width="20" height="20"><path d="M20,20h-2c0-4.4-3.6-8-8-8s-8,3.6-8,8H0c0-4.2,2.6-7.8,6.3-9.3C4.9,9.6,4,7.9,4,6c0-3.3,2.7-6,6-6s6,2.7,6,6
 	c0,1.9-0.9,3.6-2.3,4.7C17.4,12.2,20,15.8,20,20z M14,6c0-2.2-1.8-4-4-4S6,3.8,6,6s1.8,4,4,4S14,8.2,14,6z"/></svg></span></a>

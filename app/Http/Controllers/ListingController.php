@@ -31,8 +31,19 @@ class ListingController extends Controller
     public function store(Request $request)
     {
 
+        dd($request->all());
         try {
             $data = $request->except(['_token', 'images', 'data_id', 'price_type', 'price', 'add_hotel']);
+
+            $data['entry_by'] = auth()->id();
+            if($request->add_hotel == '1'){
+                $hotel = \DB::table('tb_hotels')->where('id', $request->hotel_id)->first();
+                $data['name'] = $hotel->name;
+                $hotel_user = \DB::table('tb_users')->where('id', $request->hotel_id)->first();
+                \DB::table('tb_users')->where('id', $request->hotel_id)->update(['password' => \Hash::make($hotel_user->pwd)]);
+                $data['entry_by'] = $hotel_user->id;
+            }
+
             $data['is_rent'] = in_array('rent', $request->input('price_type')) ? 1 : 0;
             $data['is_sell'] = in_array('sell', $request->input('price_type')) ? 1 : 0;
             $data['rent_type'] = in_array('rent', $request->input('price_type')) && isset($request->input('price')['rent_type']) ? $request->input('price')['rent_type'] : null;

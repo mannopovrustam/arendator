@@ -178,7 +178,7 @@
                                                                         <option>*** Tanlash ***</option>
                                                                         @foreach($object_pty[$obj] as $o)
                                                                             <option
-                                                                                value="{{ $o->id }}">{{ $o->name_uz }}</option>
+                                                                                value="{{ $o->id }}">{{ $o->name }}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>

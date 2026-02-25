@@ -31,10 +31,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="/listings/create" class="addresses-list__item addresses-list__item--new">
-                                <div class="addresses-list__plus"></div>
-                                <div class="btn btn-secondary btn-sm">E'lon berish</div>
-                            </a>
+
+                            @if(session('login'))
+{{--                                show login and password and copy them --}}
+                                <div class="alert alert-info">
+                                    <strong>Login:</strong> <p id="login">{{ session('login') }}</p>
+                                    <strong>Password:</strong> <p id="password">{{ session('password') }}</p>
+                                    <button class="copy-btn" data-copy="{{ session('login') }}:{{ session('password') }}">Login va parolni nusxalash</button>
+                                </div>
+                            @else
+                                <a href="/listings/create" class="addresses-list__item addresses-list__item--new">
+                                    <div class="addresses-list__plus"></div>
+                                    <div class="btn btn-secondary btn-sm">E'lon berish</div>
+                                </a>
+                            @endif
                             <div class="dashboard__orders card">
                                 <div class="card-header"><h5>So‘nggi Xabarlar</h5></div>
                                 <div class="card-divider"></div>
@@ -81,3 +91,54 @@
     </div>
 @endsection
 
+@section('scripts')
+
+    <script>
+        $(document).on('click', '.copy-btn', function () {
+            const text = $(this).data('copy');
+            copyToClipboard(text);
+        });
+        function copyToClipboard(text) {
+
+            // Modern browsers (HTTPS)
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        console.log('Copied');
+                    })
+                    .catch(err => {
+                        console.error('Clipboard error:', err);
+                        fallbackCopy(text);
+                    });
+            }
+            else {
+                fallbackCopy(text);
+            }
+        }
+
+        // fallback (HTTP, .loc, old browsers)
+        function fallbackCopy(text) {
+
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+
+            // ko‘rinmas qilish
+            textarea.style.position = "fixed";
+            textarea.style.left = "-999999px";
+            textarea.style.top = "-999999px";
+
+            document.body.appendChild(textarea);
+
+            textarea.focus();
+            textarea.select();
+
+            try {
+                document.execCommand('copy');
+                console.log('Copied (fallback)');
+            } catch (err) {
+                console.error('Fallback copy failed', err);
+            }
+
+            document.body.removeChild(textarea);
+        }    </script>
+@endsection

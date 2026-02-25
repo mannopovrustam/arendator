@@ -183,27 +183,13 @@ Route::view('quickview', 'quickview');
 
 Route::get('add-users', function(){
 
-    \DB::table('tb_users')->truncate();
+    // remove chars which is not latin letters from tb_users table login, pwd columns
+    $users = \DB::table('tb_users')->get();
+    foreach ($users as $user) {
+        $login = preg_replace('/[^a-zA-Z0-9]/', '', $user->login);
+        $pwd = preg_replace('/[^a-zA-Z0-9]/', '', $user->pwd);
+        $login = str_replace('rntuz', '@rnt.uz', $login);
 
-    ini_set('max_execution_time', 0);
-
-    $hotels = \DB::table('tb_hotels')->whereNotIn('hotel_type_id',[30,31])->get();
-
-    $execute = 0;
-    $start_time = microtime(true);
-
-    foreach ($hotels as $hotel) {
-        $detail = [
-            'name' => $hotel->name,
-            'login' => strtolower(str_replace(' ', '', $hotel->name)) . '@rnt.uz',
-            'password' => Hash::make(substr($hotel->name, 0, 1) . $hotel->inn),
-            'user_type' => 5,
-        ];
-        if (\DB::table('tb_users')->insert($detail)) {
-            $execute++;
-        }
+        \DB::table('tb_users')->where('id', $user->id)->update(['login' => $login, 'pwd' => $pwd]);
     }
-
-    return "Executed: $execute, Time: " . round(microtime(true) - $start_time, 2) . " seconds";
-
 });

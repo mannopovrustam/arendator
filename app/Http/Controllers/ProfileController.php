@@ -96,9 +96,15 @@ class ProfileController extends Controller
 
     }
 
+    public function getDashboard1(){
+        // return redirect to /profile/dashboard with flash message with key "status" and value "Success!" and with key "message" and value "Welcome to your dashboard!"
+        return redirect('/profile/dashboard')->with(['login' => 'Success', 'password' => 'Welcome to your dashboard!']);
+    }
     public function getDashboard(){
         $data['user_id'] = auth()->id();
         $data['user'] = \DB::table('tb_users')->where('id', $data['user_id'])->first();
+        // send flush message
+
         return view('profile.dashboard', $data);
     }
     public function getEdit(){
